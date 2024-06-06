@@ -3,6 +3,20 @@
 # 2. volumes 
 ##########
 
+variable "db_vars" {
+  type = map(string)
+  # if no default value => required (to initialize before pla/apply...) 
+  default = {
+    "MYSQL_HOSTNAME" = "db",
+    "MYSQL_ROOT_PASSWORD" = "wordpressroot"
+    "MYSQL_DATABASE" = "wordpressdb"
+    "MYSQL_USER" = "wordpressdbu"
+    "MYSQL_PASSWORD" = "wordpressuser"
+  }
+  # declare as a secret ("secret like") 
+  sensitive = true
+}
+
 ##########
 # 1. networks
 ##########
@@ -44,14 +58,15 @@ resource "docker_image" "wordpress" {
 resource "docker_container" "db" {
   image = docker_image.mariadb.image_id
   name  = "db"
-  hostname = "db"
+  hostname = var.db_vars.MYSQL_HOSTNAME
   restart = "always"
-  env = [
-    "MYSQL_ROOT_PASSWORD=somewordpress",
-    "MYSQL_DATABASE=wordpress",
-    "MYSQL_USER=wordpress",
-    "MYSQL_PASSWORD=wordpress",
-  ]
+  # static env vars 
+  # env = [
+  #   "MYSQL_ROOT_PASSWORD=${var.db_vars.MYSQL_ROOT_PASSWORD}",
+  #   "...
+  # ]
+  # dynamic env vars with for expression 
+  env = [for key, value in var.db_vars : "${key}=${value}"]
   volumes {
     volume_name    = docker_volume.db_data.name
     container_path = "/var/lib/mysql"
@@ -65,11 +80,12 @@ resource "docker_container" "wordpress" {
   image = docker_image.wordpress.image_id
   name  = "wordpress"
   restart = "always"
+  # static usage of vars 
   env = [
-    "WORDPRESS_DB_HOST=db:3306",
-    "WORDPRESS_DB_USER=wordpress",
-    "WORDPRESS_DB_PASSWORD=wordpress",
-    "WORDPRESS_DB_NAME=wordpress",
+    "WORDPRESS_DB_HOST=${var.db_vars.MYSQL_HOSTNAME}:3306",
+    "WORDPRESS_DB_USER=${var.db_vars.MYSQL_USER}",
+    "WORDPRESS_DB_PASSWORD=${var.db_vars.MYSQL_PASSWORD}",
+    "WORDPRESS_DB_NAME=${var.db_vars.MYSQL_DATABASE}",
   ]
   ports {
     internal = 80
