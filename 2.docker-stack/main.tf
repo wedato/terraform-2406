@@ -1,27 +1,20 @@
 ##########
 # 1. networks
 # 2. volumes 
+# ...
 ##########
 
 ##########
 # 1. networks
 ##########
 
-resource "docker_network" "wordpress_network" {
-  name = "wordpress_network"
-}
+# in 1.networks.tf 
 
 ##########
 # 2. volumes
 ##########
 
-resource "docker_volume" "db_data" {
-  name = "db_data"
-}
-
-resource "docker_volume" "wp_data" {
-  name = "wp_data"
-}
+# in 2.volumes.tf
 
 ##########
 # images

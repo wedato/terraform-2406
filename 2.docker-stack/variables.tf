@@ -1,5 +1,6 @@
 
 variable "db_vars" {
+  description = "All necessary values for MariaDB"
   type = map(string)
   # if no default value => required (to initialize before pla/apply...) 
   default = {
