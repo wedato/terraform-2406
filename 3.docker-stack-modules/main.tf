@@ -18,7 +18,7 @@ resource "docker_network" "wordpress_network" {
 
 module "volumes" {
   source = "./modules/volumes"
-  volumes_names = ["db_data", "wp_data"] # set as variable  
+  volumes_names = var.volumes_names # set as variable  
 }
 
 ##########

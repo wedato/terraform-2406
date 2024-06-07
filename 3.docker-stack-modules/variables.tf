@@ -1,3 +1,9 @@
+variable "volumes_names" {
+  description = "All necessary modules"
+  type = list(string)
+  # if no default value => required (to initialize before plan/apply...) 
+  default = ["db_data", "wp_data"] 
+}
 
 variable "db_vars" {
   description = "All necessary values for MariaDB"
