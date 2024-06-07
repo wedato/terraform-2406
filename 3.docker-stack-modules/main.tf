@@ -25,22 +25,17 @@ module "volumes" {
 # images
 ##########
 
-resource "docker_image" "mariadb" {
-  name         = "mariadb:10.6.4-focal"
-  # keep_locally = false # delete image on destroy 
+module "images" {
+  source = "./modules/images"
+  images_names = var.images
 }
-
-resource "docker_image" "wordpress" {
-  name         = "wordpress:latest"
-  # keep_locally = false # delete image on destroy 
-} 
 
 ##########
 # containers 
 ##########
 
 resource "docker_container" "db" {
-  image = docker_image.mariadb.image_id
+  image = module.images.image_catalog["mariadb:10.6.4-focal"].image_id
   name  = "db"
   hostname = var.db_vars.MYSQL_HOSTNAME
   restart = "always"
@@ -61,7 +56,7 @@ resource "docker_container" "db" {
 }
 
 resource "docker_container" "wordpress" {
-  image = docker_image.wordpress.image_id
+  image = module.images.image_catalog["wordpress:latest"].image_id
   name  = "wordpress"
   restart = "always"
   # static usage of vars 
@@ -83,7 +78,7 @@ resource "docker_container" "wordpress" {
     name = docker_network.wordpress_network.name
   }
   depends_on = [ # explicit dependency (not mandatory)
-    docker_image.wordpress,
+    module.images.image_catalog,
     module.volumes.custom_volumes,
     docker_network.wordpress_network,
     docker_container.db,  

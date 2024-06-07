@@ -1,3 +1,9 @@
+variable "images" {
+  description = "All necessary images"
+  type = list(string)
+  # if no default value => required (to initialize before plan/apply...) 
+}
+
 variable "volumes_names" {
   description = "All necessary modules"
   type = list(string)
