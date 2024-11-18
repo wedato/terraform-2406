@@ -39,3 +39,10 @@ resource "aws_iam_access_key" "access_keys" {
   for_each = aws_iam_user.iam_users
   user = aws_iam_user.iam_users[each.key].name
 }
+
+# Create login profile with console access and default password
+resource "aws_iam_user_login_profile" "login_profile" {
+  for_each = aws_iam_user.iam_users
+  user = aws_iam_user.iam_users[each.key].name
+  password_reset_required = true  # Forces the user to change the password on first login
+}

@@ -1,3 +1,8 @@
+variable "aws_region" {
+  type = string
+  description = "My aws region"
+}
+
 variable "aws_access_key" {
   type = string
   description = "My aws access key"

@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "website_bucket" {
-  bucket = "bucket-aelion-tf-2406-boris-website"
-
+  bucket = "bucket-cesi-tf-2411-boris-website"
   tags = {
     Name        = "My static website bucket"
   }
@@ -72,7 +71,6 @@ resource "aws_s3_bucket_ownership_controls" "my-static-website" {
 }
 
 # s3 static website url
-
 output "website_url_manual" {
   value = "http://${aws_s3_bucket.website_bucket.bucket}.s3-website.${var.aws_conf_obj.region}.amazonaws.com"
 }

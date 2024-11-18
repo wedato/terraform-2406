@@ -9,3 +9,13 @@ output "access_keys" {
   }
   sensitive = true
 }
+
+output "passwords" {
+  value = {
+    for user_name, login_profile in aws_iam_user_login_profile.login_profile :
+    user_name => {
+      encrypted_password = login_profile.encrypted_password
+    }
+  }
+  sensitive = true
+}
