@@ -7,5 +7,5 @@ terraform output -raw instance_public_ip | \
 
 ```
 cd ansible
-ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i my-inventory.yml 
+ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i my-inventory.yml playbook.yaml
 ```
