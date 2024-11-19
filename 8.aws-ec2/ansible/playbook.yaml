@@ -1,0 +1,13 @@
+---
+- name: My first playbook
+  hosts: all
+
+  tasks:
+    - name: Install Apache
+      ansible.builtin.apt:
+        name: apache2
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /var/www/aelion/terraform-2406/5.aws-s3-static-website/assets/index.html
+        dest: /var/www/html/index.html
+  
